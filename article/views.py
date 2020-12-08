@@ -3,7 +3,8 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Article, Author
-from rest_framework.generics import get_object_or_404, GenericAPIView
+from rest_framework.generics import get_object_or_404, GenericAPIView, CreateAPIView, ListAPIView, ListCreateAPIView, \
+    RetrieveAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
 from .serializers import ArticleSerializer, ArticleSerializer_using_GenericAPIView
 
 
@@ -41,16 +42,14 @@ class ArticleView_using_APIView(APIView):
         }, status=204)
 
 
-class ArticleView_using_GenericAPIView(ListModelMixin, CreateModelMixin, GenericAPIView):
+class ArticleView_using_GenericAPIView(ListCreateAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer_using_GenericAPIView
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         author = get_object_or_404(Author, id=self.request.data.get('author_id'))
         return serializer.save(author=author)
 
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
+
+class SingleArticleView(RetrieveUpdateDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer_using_GenericAPIView
