@@ -1,12 +1,13 @@
 from django.shortcuts import render
+from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Article
-from rest_framework.generics import get_object_or_404
-from .serializers import ArticleSerializer
+from .models import Article, Author
+from rest_framework.generics import get_object_or_404, GenericAPIView
+from .serializers import ArticleSerializer, ArticleSerializer_using_GenericAPIView
 
 
-class ArticleView(APIView):
+class ArticleView_using_APIView(APIView):
     def get(self, request):
         articles = Article.objects.all()
         # the many param informs the serializer that it will be serializing more than a single article.
@@ -38,3 +39,18 @@ class ArticleView(APIView):
         return Response({
             "message": "Article with id `{}` has been deleted.".format(pk)
         }, status=204)
+
+
+class ArticleView_using_GenericAPIView(ListModelMixin, CreateModelMixin, GenericAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer_using_GenericAPIView
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        author = get_object_or_404(Author, id=self.request.data.get('author_id'))
+        return serializer.save(author=author)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)

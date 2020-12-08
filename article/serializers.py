@@ -17,3 +17,9 @@ class ArticleSerializer(serializers.Serializer):
         instance.author_id = validated_data.get('author_id', instance.author_id)
         instance.save()
         return instance
+
+
+class ArticleSerializer_using_GenericAPIView(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ('id', 'title', 'description', 'body', 'author_id')
