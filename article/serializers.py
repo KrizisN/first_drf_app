@@ -23,3 +23,5 @@ class ArticleSerializer_using_GenericAPIView(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ('id', 'title', 'description', 'body', 'author_id')
+
+#test
