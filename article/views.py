@@ -1,11 +1,8 @@
-from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Article, Author
-from rest_framework.generics import get_object_or_404, GenericAPIView, CreateAPIView, ListAPIView, ListCreateAPIView, \
-    RetrieveAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .serializers import ArticleSerializer, ArticleSerializer_using_GenericAPIView
 
 
