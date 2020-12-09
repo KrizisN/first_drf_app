@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework import viewsets
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -53,3 +54,8 @@ class ArticleView_using_GenericAPIView(ListCreateAPIView):
 class SingleArticleView(RetrieveUpdateDestroyAPIView):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer_using_GenericAPIView
+
+
+class ArticleViewSet(viewsets.ModelViewSet):
+    serializer_class = ArticleSerializer
+    queryset = Article.objects.all()
